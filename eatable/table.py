@@ -1,14 +1,13 @@
 
 import csv
 from typing import Iterable
-from typing import Collection
 
 class Table:
     """
     A simple in-memory database.
     """
     @staticmethod
-    def from_csv_file(filename: str, header: Collection[str] = None) -> 'Table':
+    def from_csv_file(filename: str, header: Iterable[str] = None) -> 'Table':
         """
         Create a Table object using data from the file at the given path.
 
@@ -20,7 +19,7 @@ class Table:
             table.append_many(reader)
         return table
 
-    def __init__(self, header: Collection[str]) -> None:
+    def __init__(self, header: Iterable[str]) -> None:
         self.header = tuple(header)
         self.width = len(self.header)
         self.data = [] # type: list[tuple]
@@ -40,13 +39,14 @@ class Table:
             raise KeyError("The table has no column named '{}'".format(name))
         return index
 
-    def append(self, data: Collection):
+    def append(self, data: Iterable):
         """
         Append a new row to the table.
         """
-        assert len(data) == self.width
-        self.data.append(tuple(data))
+        actual_data = tuple(data)
+        assert len(actual_data) == self.width
+        self.data.append(actual_data)
 
-    def append_many(self, iterable: Iterable[Collection]) -> None:
+    def append_many(self, iterable: Iterable[Iterable]) -> None:
         for row in iterable:
             self.append(row)
