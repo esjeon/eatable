@@ -15,6 +15,9 @@ class RowTestCase(unittest.TestCase):
         self.assertEqual(row['A'], 'a1')
         self.assertEqual(row['B'], 'b1')
         self.assertEqual(row['C'], 'c1')
+        self.assertEqual(row[0], 'a1')
+        self.assertEqual(row[1], 'b1')
+        self.assertEqual(row[2], 'c1')
 
 if __name__ == '__main__':
     unittest.main()

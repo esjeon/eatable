@@ -1,5 +1,5 @@
 
-from typing import Any
+from typing import Any, Union
 from .table import Table
 
 class Row:
@@ -12,5 +12,7 @@ class Row:
         self.index = index
         self.data = data
 
-    def __getitem__(self, key: str) -> Any:
-        return self.data[self.table.get_column_index(key)]
+    def __getitem__(self, key: Union[str, int]) -> Any:
+        if isinstance(key, str):
+            return self.data[self.table.get_column_index(key)]
+        return self.data[key]
