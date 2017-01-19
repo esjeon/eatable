@@ -10,7 +10,7 @@ class TableTestCase(unittest.TestCase):
 
     def test_from_csv_file(self):
         table = Table.from_csv_file("tests/simple.csv")
-        self.assertEqual(len(table.data), 3)
+        self.assertEqual(len(table), 3)
 
     def test_init(self):
         table = Table(self.header)
@@ -27,7 +27,7 @@ class TableTestCase(unittest.TestCase):
         for i in range(5):
             table.append(('a' + str(i), 'b' + str(i), 'c' + str(i)))
 
-        self.assertEqual(len(table.data), 5)
+        self.assertEqual(len(table), 5)
         for i in range(5):
             self.assertIsInstance(table.data[i], tuple)
 

@@ -26,6 +26,9 @@ class Table:
         self.data = [] # type: list[tuple]
         self.column_index = dict(zip(self.header, range(self.width)))
 
+    def __len__(self):
+        return len(self.data)
+
     def get_column_index(self, name: str) -> int:
         """
         Get the index of the column with the given name.
