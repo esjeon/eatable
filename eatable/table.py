@@ -13,9 +13,9 @@ class Table:
 
         If `header` is not provided, the first row is used as header.
         """
-        with open(filename, 'rb') as csvfile:
+        with open(filename, 'r') as csvfile:
             reader = csv.reader(csvfile)
-            table = Table(reader.next() if header is None else tuple(header))
+            table = Table(next(reader) if header is None else tuple(header))
             for row in reader:
                 table.append(row)
         return table
