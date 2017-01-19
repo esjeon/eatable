@@ -1,6 +1,6 @@
 
 import unittest
-from eatable import Table
+from eatable import Table, Row
 
 class TableTestCase(unittest.TestCase):
     """Test the methods of Table"""
@@ -15,6 +15,19 @@ class TableTestCase(unittest.TestCase):
     def test_init(self):
         table = Table(self.header)
         self.assertEqual(table.width, len(self.header))
+
+    def test_getitem(self):
+        table = Table(self.header)
+        table.append(('a', 'b', 'c'))
+        row = table[0]
+        self.assertIsInstance(row, Row)
+
+    def test_setitem(self):
+        new_data = ('a2', 'b2', 'c2')
+        table = Table(self.header)
+        table.append(('a1', 'b1', 'c1'))
+        table[0] = new_data
+        self.assertEqual(table.data[0], new_data)
 
     def test_get_column_index(self):
         table = Table(self.header)

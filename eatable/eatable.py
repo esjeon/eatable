@@ -25,8 +25,14 @@ class Table:
         self.data = [] # type: list[tuple]
         self.column_index = dict(zip(self.header, range(self.width)))
 
+    def __getitem__(self, index: int) -> "Row":
+        return Row(self, index)
+
     def __len__(self):
         return len(self.data)
+
+    def __setitem__(self, index: int, data: Iterable) -> None:
+        self.data[index] = tuple(data)
 
     def get_column(self, name: str) -> int:
         """
