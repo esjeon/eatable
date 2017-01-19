@@ -18,5 +18,27 @@ class RowTestCase(unittest.TestCase):
         self.assertEqual(row[1], 'b1')
         self.assertEqual(row[2], 'c1')
 
+    def test_setitem(self):
+        row = Row(self.table, 0)
+        row[0] = '_1'
+        self.assertEqual(row[0], '_1')
+        row[0] = 'a1'
+        self.assertEqual(row[0], 'a1')
+
+    def test_update(self):
+        row = Row(self.table, 0)
+        row.update(values=('a3', 'b3', 'c3'))
+        self.assertEqual(row[0], 'a3')
+        self.assertEqual(row[1], 'b3')
+        self.assertEqual(row[2], 'c3')
+
+        row.update(changes={0: 'a1', 1: 'b1', 2: 'c1'})
+        self.assertEqual(row[0], 'a1')
+        self.assertEqual(row[1], 'b1')
+        self.assertEqual(row[2], 'c1')
+
+        with self.assertRaises(TypeError) as cm:
+            row.update()
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,6 @@
 
 import csv
-from typing import Iterable, Any, Union
+from typing import Iterable, Any, Union, Dict
 
 class Table:
     """
@@ -68,3 +68,19 @@ class Row:
 
     def __getitem__(self, key: int) -> Any:
         return self.table.data[self.index][key]
+
+    def __setitem__(self, key: int, value: Any) -> None:
+        new_data = list(self.table.data[self.index])
+        new_data[key] = value
+        self.table[self.index] = new_data
+
+    def update(self, values: tuple = None, changes: Dict[int, Any] = None) -> None:
+        if values is not None:
+            self.table[self.index] = values
+        elif changes is not None:
+            new_data = list(self.table.data[self.index])
+            for key, value in changes.items():
+                new_data[key] = value
+            self.table[self.index] = new_data
+        else:
+            raise TypeError('update() requires `values` or `changes`')
