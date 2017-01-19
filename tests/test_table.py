@@ -18,9 +18,9 @@ class TableTestCase(unittest.TestCase):
 
     def test_get_column_index(self):
         table = Table(self.header)
-        self.assertEqual(table.get_column_index('A'), 0)
-        self.assertEqual(table.get_column_index('B'), 1)
-        self.assertEqual(table.get_column_index('C'), 2)
+        self.assertEqual(table.get_column('A'), 0)
+        self.assertEqual(table.get_column('B'), 1)
+        self.assertEqual(table.get_column('C'), 2)
 
     def test_append(self):
         table = Table(self.header)

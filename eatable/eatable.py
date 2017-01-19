@@ -28,7 +28,7 @@ class Table:
     def __len__(self):
         return len(self.data)
 
-    def get_column_index(self, name: str) -> int:
+    def get_column(self, name: str) -> int:
         """
         Get the index of the column with the given name.
 
@@ -60,8 +60,5 @@ class Row:
         self.table = table
         self.index = index
 
-    def __getitem__(self, key: Union[str, int]) -> Any:
-        data = self.table.data[self.index]
-        if isinstance(key, str):
-            return data[self.table.get_column_index(key)]
-        return data[key]
+    def __getitem__(self, key: int) -> Any:
+        return self.table.data[self.index][key]

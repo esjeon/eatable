@@ -14,9 +14,6 @@ class RowTestCase(unittest.TestCase):
 
     def test_getitem(self):
         row = Row(self.table, 0)
-        self.assertEqual(row['A'], 'a1')
-        self.assertEqual(row['B'], 'b1')
-        self.assertEqual(row['C'], 'c1')
         self.assertEqual(row[0], 'a1')
         self.assertEqual(row[1], 'b1')
         self.assertEqual(row[2], 'c1')
