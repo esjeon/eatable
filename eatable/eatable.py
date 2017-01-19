@@ -54,15 +54,14 @@ class Table:
 
 class Row:
     """
-    A wrapper class which binds row data to a Table instance.
+    A proxy for rows in Table
     """
-    def __init__(self, table: Table, index: int, data: tuple) -> None:
-        assert table.width == len(data)
+    def __init__(self, table: Table, index: int) -> None:
         self.table = table
         self.index = index
-        self.data = data
 
     def __getitem__(self, key: Union[str, int]) -> Any:
+        data = self.table.data[self.index]
         if isinstance(key, str):
-            return self.data[self.table.get_column_index(key)]
-        return self.data[key]
+            return data[self.table.get_column_index(key)]
+        return data[key]
