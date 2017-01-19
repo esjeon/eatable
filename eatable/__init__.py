@@ -1,3 +1,2 @@
 
-from .table import Table
-from .row import Row
+from .eatable import Table, Row
