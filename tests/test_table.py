@@ -8,6 +8,10 @@ class TableTestCase(unittest.TestCase):
     def setUp(self):
         self.header = ['A', 'B', 'C']
 
+    def test_from_csv_file(self):
+        table = Table.from_csv_file("tests/simple.csv")
+        self.assertEqual(len(table.data), 3)
+
     def test_init(self):
         table = Table(self.header)
         self.assertEqual(table.width, len(self.header))
