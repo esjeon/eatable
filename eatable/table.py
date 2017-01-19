@@ -1,5 +1,6 @@
 
 import csv
+from typing import Iterable
 from typing import Collection
 
 class Table:
@@ -16,8 +17,7 @@ class Table:
         with open(filename, 'r') as csvfile:
             reader = csv.reader(csvfile)
             table = Table(next(reader) if header is None else tuple(header))
-            for row in reader:
-                table.append(row)
+            table.append_many(reader)
         return table
 
     def __init__(self, header: Collection[str]) -> None:
@@ -43,3 +43,7 @@ class Table:
         """
         assert len(data) == self.width
         self.data.append(tuple(data))
+
+    def append_many(self, iterable: Iterable[Collection]) -> None:
+        for row in iterable:
+            self.append(row)
