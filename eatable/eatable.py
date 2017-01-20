@@ -26,24 +26,15 @@ class Table:
         self.column_index = dict(zip(self.header, range(self.width)))
 
     def __getitem__(self, index: int) -> "Row":
+        # TODO: accept column name
         return Row(self, index)
 
     def __len__(self):
         return len(self.data)
 
     def __setitem__(self, index: int, data: Iterable) -> None:
+        # TODO: accept column name
         self.data[index] = tuple(data)
-
-    def get_column(self, name: str) -> int:
-        """
-        Get the index of the column with the given name.
-
-        This is for internal uses.
-        """
-        index = self.column_index.get(name)
-        if index is None:
-            raise KeyError("The table has no column named '{}'".format(name))
-        return index
 
     def append(self, data: Iterable):
         """
@@ -54,14 +45,32 @@ class Table:
         self.data.append(actual_data)
 
     def append_many(self, iterable: Iterable[Iterable]) -> None:
+        """
+        Append a number of rows at the same time.
+        """
+        # TODO: check length of each iterable in advance
         for row in iterable:
             self.append(row)
 
+    # TODO: rename to get_column_index
+    # TODO: handle both str and int
+    def get_column(self, name: str) -> int:
+        """
+        Get the index of the column with the given name.
+        """
+        index = self.column_index.get(name)
+        if index is None:
+            raise KeyError("The table has no column named '{}'".format(name))
+        return index
 
+    # TODO: implement `update(self, columns:Tuple[str], value:Iterable, values:Iterable[Iterable])
+
+# TODO: implement all actual operations from Row to Table. Row is "proxy".
 class Row:
     """
-    A proxy for rows in Table
+    A proxy for a row in Table
     """
+
     def __init__(self, table: Table, index: int) -> None:
         self.table = table
         self.index = index
@@ -75,6 +84,7 @@ class Row:
         self.table[self.index] = new_data
 
     def update(self, values: tuple = None, changes: Dict[int, Any] = None) -> None:
+        # TODO: I think this can be better than this...
         if values is not None:
             self.table[self.index] = values
         elif changes is not None:
