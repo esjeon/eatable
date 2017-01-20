@@ -7,52 +7,65 @@ class TableTestCase(unittest.TestCase):
 
     def setUp(self):
         self.header = ['A', 'B', 'C']
+        self.length = 3
+        self.table = Table(self.header)
+        for i in range(self.length):
+            self.table.append(('a' + str(i), 'b' + str(i), 'c' + str(i)))
 
     def test_from_csv_file(self):
         table = Table.from_csv_file("tests/simple.csv")
         self.assertEqual(len(table), 3)
 
-    def test_init(self):
-        table = Table(self.header)
-        self.assertEqual(table.width, len(self.header))
+    def test_init_append(self):
+        self.assertEqual(self.table.width, len(self.header))
+        self.assertEqual(self.table.data[0], ('a0', 'b0', 'c0'))
+        self.assertEqual(self.table.data[1], ('a1', 'b1', 'c1'))
+        self.assertEqual(self.table.data[2], ('a2', 'b2', 'c2'))
 
     def test_getitem(self):
-        table = Table(self.header)
-        table.append(('a', 'b', 'c'))
-        row = table[0]
+        row = self.table[0]
         self.assertIsInstance(row, Row)
 
     def test_setitem(self):
-        new_data = ('a2', 'b2', 'c2')
-        table = Table(self.header)
-        table.append(('a1', 'b1', 'c1'))
-        table[0] = new_data
-        self.assertEqual(table.data[0], new_data)
-
-    def test_get_column_index(self):
-        table = Table(self.header)
-        self.assertEqual(table.get_column_index('A'), 0)
-        self.assertEqual(table.get_column_index('B'), 1)
-        self.assertEqual(table.get_column_index('C'), 2)
-        self.assertEqual(table.get_column_index(0), 0)
-        self.assertEqual(table.get_column_index(1), 1)
-        self.assertEqual(table.get_column_index(2), 2)
-
-        with self.assertRaises(IndexError):
-            table.get_column_index(10)
-        with self.assertRaises(KeyError):
-            table.get_column_index('D')
-        with self.assertRaises(TypeError):
-            table.get_column_index(['E'])
+        self.table[0] = ('x1', 'y1', 'z1')
+        self.assertEqual(self.table.data[0], ('x1', 'y1', 'z1'))
 
     def test_append(self):
-        table = Table(self.header)
-        for i in range(5):
-            table.append(('a' + str(i), 'b' + str(i), 'c' + str(i)))
+        # normal case is already tested
+        with self.assertRaises(AssertionError):
+            self.table.append((1, 2, 3, 4))
 
-        self.assertEqual(len(table), 5)
-        for i in range(5):
-            self.assertIsInstance(table.data[i], tuple)
+    def test_get_row(self):
+        row = self.table.get_row(0)
+        self.assertIsInstance(row, Row)
+        self.assertEqual(row.table, self.table)
+        self.assertEqual(row.index, 0)
+
+        with self.assertRaises(IndexError):
+            self.table.get_row(30)
+
+    def test_set_row(self):
+        self.table.set_row(0, range(3))
+        self.assertEqual(self.table.data[0], tuple(range(3)))
+
+        with self.assertRaises(IndexError):
+            self.table.set_row(30, range(3))
+
+
+    def test_get_column_index(self):
+        self.assertEqual(self.table.get_column_index('A'), 0)
+        self.assertEqual(self.table.get_column_index('B'), 1)
+        self.assertEqual(self.table.get_column_index('C'), 2)
+        self.assertEqual(self.table.get_column_index(0), 0)
+        self.assertEqual(self.table.get_column_index(1), 1)
+        self.assertEqual(self.table.get_column_index(2), 2)
+
+        with self.assertRaises(IndexError):
+            self.table.get_column_index(10)
+        with self.assertRaises(KeyError):
+            self.table.get_column_index('D')
+        with self.assertRaises(TypeError):
+            self.table.get_column_index(['E'])
 
 if __name__ == '__main__':
     unittest.main()
