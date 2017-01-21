@@ -110,6 +110,9 @@ class Table:
             raise TypeError("width mismatch")
         self.data[index] = actual_data
 
+    def to_list(self) -> Iterable[tuple]:
+        return list(self.data)
+
     def translate(self, column: ColumnRef, translator: Callable) -> None:
         index = self.get_column_index(column)
         for row in self: # type: ignore
