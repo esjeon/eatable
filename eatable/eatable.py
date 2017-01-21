@@ -5,7 +5,7 @@ from typing import Iterable, Any, Union, Dict, Callable
 ColumnRef = Union[str, int]
 RowData = Iterable
 RowIndex = int
-SelectFilter = Callable[[RowData], bool]
+SelectFilter = Callable[["Row"], bool]
 
 class Table:
     """
@@ -109,6 +109,11 @@ class Table:
         if len(actual_data) != self.width:
             raise TypeError("width mismatch")
         self.data[index] = actual_data
+
+    def translate(self, column: ColumnRef, translator: Callable) -> None:
+        index = self.get_column_index(column)
+        for row in self: # type: ignore
+            row[index] = translator(row[index])
 
     def update(
             self,
