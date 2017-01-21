@@ -16,8 +16,8 @@ class UseCaseTestCase(unittest.TestCase):
         self.assertEqual(result[0]['name'], 'Jack')
         self.assertEqual(result[1]['name'], 'Frank')
 
-        lst = result.to_list()
-        self.assertEqual(lst, [('Jack',), ('Frank',)])
+        lst = result.to_list(flatten=True)
+        self.assertEqual(lst, ['Jack', 'Frank'])
 
 if __name__ == '__main__':
     unittest.main()
