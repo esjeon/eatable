@@ -32,7 +32,7 @@ class RowTestCase(unittest.TestCase):
         self.assertEqual(row[1], 'b3')
         self.assertEqual(row[2], 'c3')
 
-        row.update(changes={0: 'a1', 1: 'b1', 2: 'c1'})
+        row.update(columns=(0,1,2), values=('a1', 'b1', 'c1'))
         self.assertEqual(row[0], 'a1')
         self.assertEqual(row[1], 'b1')
         self.assertEqual(row[2], 'c1')

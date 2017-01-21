@@ -87,9 +87,21 @@ class Table:
             raise TypeError("width mismatch")
         self.data[index] = actual_data
 
-    # TODO: implement `update(self, columns:Tuple[str], value:Iterable, values:Iterable[Iterable])
+    def update(
+            self,
+            columns: Iterable[ColumnRef] = None,
+            values: Dict[RowIndex, Iterable] = None
+    ) -> None:
+        """
+        update multiple rows and columns.
+        """
+        column_indexes = tuple(
+            range(self.width) if columns is None
+            else map(self.get_column_index, columns))
+        for row_index, row_values in values.items():
+            row = self.get_row(row_index)
+            row.update(indexes=column_indexes, values=row_values)
 
-# TODO: implement all actual operations from Row to Table. Row is "proxy".
 class Row:
     """
     A proxy for a row in Table
@@ -111,14 +123,21 @@ class Row:
     def get_data(self) -> tuple:
         return self.table.get_row_data(self.index)
 
-    def update(self, values: tuple = None, changes: Dict[int, Any] = None) -> None:
-        # TODO: I think this can be better than this...
-        if values is not None:
-            self.table[self.index] = values
-        elif changes is not None:
-            new_data = list(self.table.data[self.index])
-            for key, value in changes.items():
-                new_data[key] = value
-            self.table[self.index] = new_data
-        else:
-            raise TypeError('update() requires `values` or `changes`')
+    def update(
+            self,
+            columns: Iterable[ColumnRef] = None,
+            indexes: Iterable[int] = None,
+            values: Iterable = None
+    ) -> None:
+        """
+        update multiple values in the row.
+        """
+        if indexes is None:
+            indexes = tuple(
+                range(self.table.width)if columns is None
+                else map(self.table.get_column_index, columns))
+        data = list(self.get_data())
+        for index, value in zip(indexes, values):
+            data[index] = value
+        self.table.set_row(self.index, data)
+

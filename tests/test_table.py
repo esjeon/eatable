@@ -67,5 +67,15 @@ class TableTestCase(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.table.get_column_index(['E'])
 
+    def test_update(self):
+        self.table.update(
+            ('A', 'B'),
+            {
+                0: ('00', '11')
+            }
+        )
+        self.assertEqual(self.table.get_row_data(0), ('00', '11', 'c0'))
+
+
 if __name__ == '__main__':
     unittest.main()
