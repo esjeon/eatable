@@ -188,6 +188,6 @@ class TableIterator:
 
     def __next__(self) -> Row:
         self.index += 1
-        if not 0 <= self.index < self.table.width:
+        if not 0 <= self.index < len(self.table):
             raise StopIteration()
         return self.table.get_row(self.index)
