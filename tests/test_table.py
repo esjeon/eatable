@@ -26,6 +26,11 @@ class TableTestCase(unittest.TestCase):
         row = self.table[0]
         self.assertIsInstance(row, Row)
 
+    def test_iter(self):
+        for row, i in zip(self.table, range(self.length)):
+            data = ('a' + str(i), 'b' + str(i), 'c' + str(i))
+            self.assertEqual(row.get_data(), data)
+
     def test_setitem(self):
         self.table[0] = ('x1', 'y1', 'z1')
         self.assertEqual(self.table.data[0], ('x1', 'y1', 'z1'))

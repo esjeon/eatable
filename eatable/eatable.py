@@ -31,6 +31,9 @@ class Table:
     def __getitem__(self, index: RowIndex) -> "Row":
         return self.get_row(index)
 
+    def __iter__(self) -> "TableIterator":
+        return TableIterator(self)
+
     def __len__(self):
         return len(self.data)
 
@@ -114,6 +117,9 @@ class Row:
     def __getitem__(self, ref: ColumnRef) -> Any:
         return self.get_data()[self.table.get_column_index(ref)]
 
+    def __iter__(self):
+        return iter(zip(self.table.header, self.get_data()))
+
     def __setitem__(self, ref: ColumnRef, value: Any) -> None:
         data = self.get_data()
         new_data = list(data)
@@ -141,3 +147,17 @@ class Row:
             data[index] = value
         self.table.set_row(self.index, data)
 
+
+class TableIterator:
+    def __init__(self, table: Table) -> None:
+        self.table = table
+        self.index = -1
+
+    def __iter__(self):
+        return self
+
+    def __next__(self) -> Row:
+        self.index += 1
+        if not 0 <= self.index < self.table.width:
+            raise StopIteration()
+        return self.table.get_row(self.index)

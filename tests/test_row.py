@@ -18,6 +18,13 @@ class RowTestCase(unittest.TestCase):
         self.assertEqual(row[1], 'b1')
         self.assertEqual(row[2], 'c1')
 
+    def test_iter(self):
+        row = Row(self.table, 0)
+        row_iter = iter(row)
+        self.assertEqual(next(row_iter), ('A', 'a1'))
+        self.assertEqual(next(row_iter), ('B', 'b1'))
+        self.assertEqual(next(row_iter), ('C', 'c1'))
+
     def test_setitem(self):
         row = Row(self.table, 0)
         row[0] = '_1'
