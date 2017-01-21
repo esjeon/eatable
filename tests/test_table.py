@@ -72,6 +72,16 @@ class TableTestCase(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.table.get_column_index(['E'])
 
+    def test_select(self):
+        self.assertEqual(self.table.data, self.table.select().data)
+        new_table = self.table.select('A')
+        self.assertEqual(new_table[0].get_data(), ('a0',))
+        self.assertEqual(new_table[1].get_data(), ('a1',))
+        new_table = self.table.select('B', 'C')
+        self.assertEqual(new_table[0].get_data(), ('b0', 'c0'))
+        self.assertEqual(new_table[1].get_data(), ('b1', 'c1'))
+
+
     def test_update(self):
         self.table.update(
             ('A', 'B'),

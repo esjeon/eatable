@@ -32,6 +32,11 @@ class RowTestCase(unittest.TestCase):
         row[0] = 'a1'
         self.assertEqual(row[0], 'a1')
 
+    def test_select(self):
+        row = Row(self.table, 0)
+        self.assertEqual(row.select('A'), ('a1',))
+        self.assertEqual(row.select('B', 'C'), ('b1', 'c1'))
+
     def test_update(self):
         row = Row(self.table, 0)
         row.update(values=('a3', 'b3', 'c3'))

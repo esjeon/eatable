@@ -1,9 +1,11 @@
 
 import csv
-from typing import Iterable, Any, Union, Dict
+from typing import Iterable, Any, Union, Dict, Callable
 
 ColumnRef = Union[str, int]
+RowData = Iterable
 RowIndex = int
+SelectFilter = Callable[[RowData], bool]
 
 class Table:
     """
@@ -82,6 +84,24 @@ class Table:
     def get_row_data(self, index:RowIndex) -> tuple:
         return self.data[index]
 
+    def select(
+            self,
+            *columns: ColumnRef,
+            where: SelectFilter = None
+    ) -> "Table":
+        if where is None:
+            where = lambda _: True
+        column_indexes = tuple(
+            range(self.width) if len(columns) == 0
+            else map(self.get_column_index, columns))
+        table = Table(self.header[index] for index in column_indexes)
+        table.append_many([
+            row.select(*column_indexes)
+            for row in self.__iter__() # type: ignore
+            if where(row) is True
+        ])
+        return table
+
     def set_row(self, index: RowIndex, data: Iterable):
         if not 0 <= index < self.__len__():
             raise IndexError("index out of range: {}", format(index))
@@ -128,6 +148,11 @@ class Row:
 
     def get_data(self) -> tuple:
         return self.table.get_row_data(self.index)
+
+    def select(self, *columns: ColumnRef):
+        data = self.get_data()
+        indexes = map(self.table.get_column_index, columns)
+        return tuple(data[index] for index in indexes)
 
     def update(
             self,
